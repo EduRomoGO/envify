@@ -15,6 +15,7 @@ function initMap({locations}) {
     	marker = new google.maps.Marker({
 	      map: map,
 	      position: location.location,
+	      label: 'hola',
 	      title: 'Hello World!'
 	    });
     });
@@ -67,6 +68,7 @@ function getDestinations ({keywords}) {
 		];
 		initMap({locations: res});
 		$('#map').show();
+		$('#my-dropzone').hide();
 	}
 
 	$.ajax({
@@ -81,9 +83,6 @@ function getDestinations ({keywords}) {
 
 
 $(function() {
-  // Now that the DOM is fully loaded, create the dropzone, and setup the
-  // event listeners
-
   $('#map').hide();
 
   var method = 'POST';
@@ -94,7 +93,7 @@ $(function() {
   	console.log(file);
   	console.log('uploaded');
   	console.log(res);
-  	res = ['beach', 'sun', 'chair', 'ball'];
+  	// res = ['beach', 'sun', 'chair', 'ball'];
   	getDestinations({keywords: res});
   	// drawMap();
   	// $('#map').show();
