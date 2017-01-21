@@ -2,4 +2,4 @@ hackaton-php/.idea/*
 hackaton-php/vendor/*
 
 /resources
-.DS_Store
+#.DS_Store
