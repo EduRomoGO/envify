@@ -1,21 +1,30 @@
 'use strict';
 
-function initMap() {
-    var myLatLng = {lat: -25.363, lng: 131.044};
+function initMap({locations}) {
+    // var myLatLng = {lat: -25.363, lng: 131.044};
 
     // Create a map object and specify the DOM element for display.
     var map = new google.maps.Map(document.getElementById('map'), {
-      center: myLatLng,
+      center: locations[0].location,
       scrollwheel: false,
-      zoom: 2
+      zoom: 3
+    });
+
+    var marker;
+    locations.forEach(function (location) {
+    	marker = new google.maps.Marker({
+	      map: map,
+	      position: location.location,
+	      title: 'Hello World!'
+	    });
     });
 
     // Create a marker and set its position.
-    var marker = new google.maps.Marker({
-      map: map,
-      position: myLatLng,
-      title: 'Hello World!'
-    });
+    // var marker = new google.maps.Marker({
+    //   map: map,
+    //   position: myLatLng,
+    //   title: 'Hello World!'
+    // });
 }
 
 function getPayload ({keywords}) {
@@ -38,7 +47,25 @@ function getDestinations ({keywords}) {
 	function success (res) {
 		console.log('dest');
 		console.log(res);
-		initMap();
+		res = [
+			{
+				name: 'malibu',
+	            location: {
+	                lat: -25.363,
+	                lng: 131.044
+	            },
+	            hotels: []
+			},
+			{
+				name: 'marbella',
+	            location: {
+	                lat: -27.363,
+	                lng: 133.044
+	            },
+	            hotels: []
+			}
+		];
+		initMap({locations: res});
 		$('#map').show();
 	}
 
