@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'sun' => 'beach',
-    'sand' => 'beach',
-    'sea' => 'beach',
-    'mountain' => 'mountain',
-    'snow' => 'mountain',
+    'sun' => 'Beaches',
+    'sand' => 'Beaches',
+    'sea' => 'Beaches',
+    'mountain' => 'Canyons',
+    'snow' => 'Canyons',
 ];

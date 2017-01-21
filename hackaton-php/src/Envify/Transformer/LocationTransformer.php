@@ -2,22 +2,16 @@
 
 namespace Envify\Transformer;
 
+use Envify\Service\MinubeService;
+
 class LocationTransformer implements TransformerInterface
 {
-    private $matching = [];
+    /** @var MinubeService */
+    private $minubeService;
 
-    public function __construct($country = 'spain')
+    public function __construct(MinubeService $minubeService)
     {
-        $filename = __DIR__ . '/../Dictionary/locations.' . $country . '.php';
-
-        if (file_exists($filename)) {
-            $this->matching = require $filename;
-        }
-    }
-
-    public function transform(array $keywords)
-    {
-        return $this->getLocationsByKeywords($keywords);
+        $this->minubeService = $minubeService;
     }
 
     /**
@@ -28,26 +22,52 @@ class LocationTransformer implements TransformerInterface
      *
      * @return array Locations
      */
-    public function getLocationsByKeywords(array $keywords)
+    public function transform(array $keywords)
     {
-        $locationsCriteria = [];
-
+        $resultPois = [];
         foreach ($keywords as $keyword => $weight) {
-            if (array_key_exists($keyword, $this->matching)) {
-                $match = $this->matching[$keyword];
+            $category = $this->minubeService->getCategoryIdByName($keyword);
+            // echo 'Searching ' . $keyword . '...';
 
-                foreach ($match as $location) {
-                    if (array_key_exists($location, $locationsCriteria)) {
-                        $locationsCriteria[$location] += $weight;
-                    } else {
-                        $locationsCriteria[$location] = $weight;
-                    }
+            if (!property_exists($category, 'id')) {
+                //echo ' NOT FOUND';
+                continue;
+            }
+
+            // echo 'CATID: ' . $category->id . '<br />'   ;
+
+            $pois = $this->minubeService->getPoisByCategoryId($category->id);
+
+            foreach ($pois as $poi) {
+                if (array_key_exists($poi->id, $resultPois)) {
+                    $poi->weight += $weight;
+                } else {
+                    $poi->weight = $weight;
                 }
-            } else {
-                // No location for this word, ignore
+
+                $location = new \stdClass();
+                $location->lat = $poi->latitude;
+                $location->lng = $poi->longitude;
+
+                $resultPois[$poi->id] = [
+                    'name' => $poi->name,
+                    'location' => $location,
+                    'weight' => $poi->weight,
+                    'hotels' => []
+                ];
             }
         }
 
-        return $locationsCriteria;
+        /*
+         * return [
+         *      'City/Poi' => [
+         *          'name' => 'Name of place',
+         *          'location' => ['lat' => ..., 'lng' => ...],
+         *          'weight' => (int) Weight
+         *       ],
+         *      ...
+         * ]
+         */
+        return $resultPois;
     }
 }

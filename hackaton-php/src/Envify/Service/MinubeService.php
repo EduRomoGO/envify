@@ -19,7 +19,7 @@ class MinubeService
         $this->client = $client;
     }
 
-    public function getCitiesByCategoryId($categoryId)
+    public function getPoisByCategoryId($categoryId)
     {
         $categoryId = (int)$categoryId;
 
@@ -50,7 +50,7 @@ class MinubeService
         }
 
         $categories = json_decode($res->getBody()->getContents());
-        $result = null;
+        $result = new \stdClass();
 
         foreach ($categories as $category) {
             if ($category->name == $name) {
