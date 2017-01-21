@@ -64,9 +64,9 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     -webkit-animation-name: body; /* Chrome, Safari, Opera */
-    -webkit-animation-duration: 7s; /* Chrome, Safari, Opera */
+    -webkit-animation-duration: 30s; /* Chrome, Safari, Opera */
     animation-name: body;
-    transition: 7s;
+    transition: 30s;
     animation-iteration-count: infinite;
     position: relative;
 }

@@ -4,3 +4,5 @@ hackaton-php/vendor/*
 /resources
 #.DS_Store
 img_processor_api/public/*
+
+#img_processor_api/.DS_Store
