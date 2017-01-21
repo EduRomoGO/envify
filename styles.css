@@ -1,5 +1,14 @@
-#dropzone, #my-dropzone {
+/*#dropzone, #my-dropzone {
 	border: 1px solid black;
+}
+*/
+
+.dzone {
+	width: 350px;
+}
+
+html {
+	background-color: #f4fdff;
 }
 
 #map {
