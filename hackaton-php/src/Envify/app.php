@@ -3,6 +3,7 @@
 namespace Envify;
 
 use Envify\Service\HotelBedsService;
+use Envify\Service\MinubeService;
 use Envify\Transformer\KeywordTransformer;
 use Envify\Transformer\LocationTransformer;
 use Envify\Transformer\TransformerInterface;
@@ -19,14 +20,18 @@ $app->error(function (\Exception $e) use ($app) {
     return $app->json(['error' => $e->getCode(), 'message' => $e->getMessage()], 400);
 });
 
-$app['hotelbeds_credentials'] = require __DIR__ . '/config.php';
+$app['credentials'] = require __DIR__ . '/config.php';
 
 $app['http_client'] = function () {
     return new Client();
 };
 
 $app['hotelbeds_service'] = function ($app) {
-    return new HotelBedsService($app['hotelbeds_credentials'], $app['http_client']);
+    return new HotelBedsService($app['credentials']['hotelbeds'], $app['http_client']);
+};
+
+$app['minube_service'] = function ($app) {
+    return new MinubeService($app['credentials']['minube'], $app['http_client']);
 };
 
 $app['keywords_service'] = function ($app) {
@@ -68,6 +73,22 @@ $app->post('/locations', function (Request $request) use ($searchCallback, $app)
 });
 
 $app->get('/locations/{keywords}', $searchCallback);
+
+$app->get('/minube/getpois/{categoryId}', function ($categoryId) use ($app) {
+    /** @var MinubeService */
+    $minubeService = $app['minube_service'];
+
+    $output = $minubeService->getCitiesByCategoryId($categoryId);
+    return $app->json($output);
+})->assert('categoryId', '\d+');
+
+$app->get('/minube/getcategory/{name}', function ($name) use ($app) {
+    /** @var MinubeService */
+    $minubeService = $app['minube_service'];
+
+    $output = $minubeService->getCategoryIdByName($name);
+    return $app->json($output);
+});
 
 $app->get('/', function () use ($app) {
     $output = ['Bienvenido a Envify'];
