@@ -3,6 +3,9 @@
 namespace Envify;
 
 use Envify\Service\HotelBedsService;
+use Envify\Transformer\KeywordTransformer;
+use Envify\Transformer\LocationTransformer;
+use Envify\Transformer\TransformerInterface;
 use GuzzleHttp\Client;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,24 +29,16 @@ $app['hotelbeds_service'] = function ($app) {
     return new HotelBedsService($app['hotelbeds_credentials'], $app['http_client']);
 };
 
-$app->get('/', function () use ($app) {
-    $output = ['Bienvenido a Envify'];
+$app['keywords_service'] = function ($app) {
+    return new KeywordTransformer();
+};
 
-    return $app->json($output);
-});
-
-$app->get('/hbstatus', function () use ($app) {
-    /** @var HotelBedsService $logService */
-    $hotelbedsService = $app['hotelbeds_service'];
-
-    $result = $hotelbedsService->getStatus();
-    $output = ['status' => $result->status];
-    return $app->json($output);
-});
-
+$app['locations_service'] = function ($app) {
+    return new LocationTransformer();
+};
 
 $app->post('/locations', function (Request $request) use ($app) {
-    /** @var HotelBedsService $logService */
+    /** @var HotelBedsService */
     $hotelbedsService = $app['hotelbeds_service'];
 
     $keywords = $request->get('keywords');
@@ -53,12 +48,30 @@ $app->post('/locations', function (Request $request) use ($app) {
 });
 
 $app->get('/locations/{keywords}', function ($keywords) use ($app) {
-    /** @var HotelBedsService $logService */
+    /** @var TransformerInterface $keywordTransformer */
+    $keywordTransformer = $app['keywords_service'];
+
+    /** @var HotelBedsService */
     $hotelbedsService = $app['hotelbeds_service'];
 
     $keywords = explode(',', $keywords);
 
-    $output = $keywords;
+    $output = $keywordTransformer->transform($keywords);
+    return $app->json($output);
+});
+
+$app->get('/', function () use ($app) {
+    $output = ['Bienvenido a Envify'];
+
+    return $app->json($output);
+});
+
+$app->get('/hbstatus', function () use ($app) {
+    /** @var HotelBedsService */
+    $hotelbedsService = $app['hotelbeds_service'];
+
+    $result = $hotelbedsService->getStatus();
+    $output = ['status' => $result->status];
     return $app->json($output);
 });
 

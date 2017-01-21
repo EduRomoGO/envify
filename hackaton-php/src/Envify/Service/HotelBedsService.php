@@ -18,7 +18,23 @@ class HotelBedsService
 
     public function getLocationsByKeywords(array $keywords)
     {
+        try {
+            $res = $this->client->request(
+                'GET',
+                $this->parameters['endpoint'] . '/hotel-api/1.0/status',
+                [
+                    'headers' => [
+                        'Api-Key' => $this->parameters['apiKey'],
+                        'X-Signature' => $this->getSignature(),
+                        'Accept' => 'application/json'
+                    ]
+                ]
+            );
+        } catch (\Exception $e) {
+            throw new \Exception('Impossible to connect with HotelBeds');
+        }
 
+        return json_decode($res->getBody()->getContents());
     }
 
     /**
