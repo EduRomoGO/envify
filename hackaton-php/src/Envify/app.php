@@ -39,7 +39,7 @@ $app['keywords_service'] = function ($app) {
 };
 
 $app['locations_service'] = function ($app) {
-    return new LocationTransformer($app['minube_service']);
+    return new LocationTransformer($app['minube_service'], $app['hotelbeds_service']);
 };
 
 $searchCallback = function ($keywords) use ($app) {
@@ -59,7 +59,8 @@ $searchCallback = function ($keywords) use ($app) {
     $searchCriteria = $keywordTransformer->transform($keywords);
     $locations = $locationsTransformer->transform($searchCriteria);
 
-    arsort($locations);
+    // TODO: Sort by something
+    // arsort($locations);
 
     $output = $locations;
     // $output = $searchCriteria;

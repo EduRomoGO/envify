@@ -22,6 +22,7 @@ class MinubeService
     public function getPoisByCategoryId($categoryId)
     {
         $categoryId = (int)$categoryId;
+        $limit = 5;
 
         try {
             $res = $this->client->request(
@@ -32,7 +33,7 @@ class MinubeService
             throw new \Exception('Impossible to connect with MiNube');
         }
 
-        return json_decode($res->getBody()->getContents());
+        return array_slice(json_decode($res->getBody()->getContents()), 0, $limit);
     }
 
     /**

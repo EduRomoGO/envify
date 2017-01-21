@@ -16,7 +16,7 @@ class HotelBedsService
         $this->client = $client;
     }
 
-    public function getHotelsByCoords($lat, $lng, $limit = 100)
+    public function getHotelsByCoords($lat, $lng, $limit = 5)
     {
         // TODO: Give new dates based on current date
         $rawBody = '{
@@ -24,6 +24,11 @@ class HotelBedsService
 "checkIn": "2017-02-01",
 "checkOut": "2017-02-07",
 "shiftDays": "2"
+},
+"filter": {
+ "maxRatesPerRoom": 1,
+ "maxRooms": 1,
+ "maxHotels": ' . $limit . '
 },
 "occupancies": [
 {
@@ -55,19 +60,22 @@ class HotelBedsService
                 ]
             );
         } catch (\Exception $e) {
+            var_dump($e);
             throw new \Exception('Impossible to connect with HotelBeds');
         }
 
         $result = json_decode($res->getBody()->getContents());
         $hotels = [];
         $i = 0;
-        foreach ($result->hotels->hotels as $hotel) {
-            $hotels[] = [
-                'name' => $hotel->name
-            ];
+        if (property_exists($result, 'hotels') && property_exists($result->hotels, 'hotels')) {
+            foreach ($result->hotels->hotels as $hotel) {
+                $hotels[] = [
+                    'name' => $hotel->name
+                ];
 
-            if (++$i === $limit) {
-                break;
+                if (++$i === $limit) {
+                    break;
+                }
             }
         }
 

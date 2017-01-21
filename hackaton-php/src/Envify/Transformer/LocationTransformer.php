@@ -2,6 +2,7 @@
 
 namespace Envify\Transformer;
 
+use Envify\Service\HotelBedsService;
 use Envify\Service\MinubeService;
 
 class LocationTransformer implements TransformerInterface
@@ -9,9 +10,13 @@ class LocationTransformer implements TransformerInterface
     /** @var MinubeService */
     private $minubeService;
 
-    public function __construct(MinubeService $minubeService)
+    /** @var HotelBedsService  */
+    private $hotelBedsService;
+
+    public function __construct(MinubeService $minubeService, HotelBedsService $hotelBedsService)
     {
         $this->minubeService = $minubeService;
+        $this->hotelBedsService = $hotelBedsService;
     }
 
     /**
@@ -34,8 +39,6 @@ class LocationTransformer implements TransformerInterface
                 continue;
             }
 
-            // echo 'CATID: ' . $category->id . '<br />'   ;
-
             $pois = $this->minubeService->getPoisByCategoryId($category->id);
 
             foreach ($pois as $poi) {
@@ -53,7 +56,7 @@ class LocationTransformer implements TransformerInterface
                     'name' => $poi->name,
                     'location' => $location,
                     'weight' => $poi->weight,
-                    'hotels' => []
+                    'hotels' => $this->hotelBedsService->getHotelsByCoords($location->lat, $location->lng, 5)
                 ];
             }
         }
