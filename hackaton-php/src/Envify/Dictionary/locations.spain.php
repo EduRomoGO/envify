@@ -4,12 +4,21 @@
 
 return [
     'beach' => [
-        // Locations in Spain where we have beaches
+        'Barcelona',
+        'Malaga',
+        'Almeria',
+        'Valencia'
+        // ['41.3947688', '2.0787275'], // Barcelona
+        // ['41.3947688', '2.0787275'], // Valencia
     ],
     'lake' => [
-
+        'Zamora', // Sanabria
     ],
-    'mountains' => [
-
+    'mountain' => [
+        'Granada'
+    ],
+    'swimming' => [
+        'Malaga',
+        'Valencia'
     ]
 ];
