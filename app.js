@@ -10,14 +10,25 @@ function initMap({locations}) {
       zoom: 3
     });
 
-    var marker;
+    var marker, infoWindow;
     locations.forEach(function (location) {
+
+		var contentString = '<div id="content">'+ location.name + '</div>';
+
+		var infowindow = new google.maps.InfoWindow({
+			content: contentString
+		});
+
     	marker = new google.maps.Marker({
 	      map: map,
-	      position: location.location,
-	      label: 'hola',
-	      title: 'Hello World!'
+	      position: location.location
+	      // label: 'hola',
+	      // title: 'Hello World!'
 	    });
+
+		marker.addListener('click', function() {
+			infowindow.open(map, marker);
+		});
     });
 
     // Create a marker and set its position.
@@ -27,6 +38,10 @@ function initMap({locations}) {
     //   title: 'Hello World!'
     // });
 }
+
+
+
+
 
 function getPayload ({keywords}) {
 	let payload = '';
@@ -73,11 +88,13 @@ function getDestinations ({keywords}) {
 
 	$.ajax({
 		type: 'POST',
-		url: 'https://84ba01d1.ngrok.io/locations',
+		url: 'http://localhost:8000/locations',
+		// url: 'https://e8bdd753.ngrok.io/locations',
 		data: getPayload({keywords}),
 		// data: 'keywords[]=sea&keywords[]=mountain',
 		context: document.body,
-		success
+		success,
+	    timeout: 30000
 	});
 }
 
@@ -88,7 +105,7 @@ $(function() {
   var method = 'POST';
 
   // method = 'GET';
-  var myDropzone = new Dropzone("#my-dropzone", { method, url: "http://c292aebc.ngrok.io/images"});
+  var myDropzone = new Dropzone("#my-dropzone", { method, url: "http://4f210dea.ngrok.io/images"});
   myDropzone.on("success", function(file, res) {
   	console.log(file);
   	console.log('uploaded');
