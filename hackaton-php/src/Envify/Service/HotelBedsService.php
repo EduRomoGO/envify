@@ -16,25 +16,62 @@ class HotelBedsService
         $this->client = $client;
     }
 
-    public function getLocationsByKeywords(array $keywords)
+    public function getHotelsByCoords($lat, $lng, $limit = 100)
     {
+        // TODO: Give new dates based on current date
+        $rawBody = '{
+"stay": {
+"checkIn": "2017-02-01",
+"checkOut": "2017-02-07",
+"shiftDays": "2"
+},
+"occupancies": [
+{
+  "rooms": 1,
+  "adults": 2,
+  "children": 0
+}
+],
+  "geolocation": {
+    "longitude": ' . $lng . ',
+    "latitude": ' . $lat . ',
+    "radius": 1,
+    "unit": "km"
+  }
+}';
+
         try {
             $res = $this->client->request(
-                'GET',
-                $this->parameters['endpoint'] . '/hotel-api/1.0/status',
+                'POST',
+                $this->parameters['endpoint'] . '/hotel-api/1.0/hotels',
                 [
                     'headers' => [
                         'Api-Key' => $this->parameters['apiKey'],
                         'X-Signature' => $this->getSignature(),
-                        'Accept' => 'application/json'
-                    ]
+                        'Accept' => 'application/json',
+                        'Content-Type' => 'application/json',
+                    ],
+                    'body' => $rawBody
                 ]
             );
         } catch (\Exception $e) {
             throw new \Exception('Impossible to connect with HotelBeds');
         }
 
-        return json_decode($res->getBody()->getContents());
+        $result = json_decode($res->getBody()->getContents());
+        $hotels = [];
+        $i = 0;
+        foreach ($result->hotels->hotels as $hotel) {
+            $hotels[] = [
+                'name' => $hotel->name
+            ];
+
+            if (++$i === $limit) {
+                break;
+            }
+        }
+
+        return $hotels;
     }
 
     /**

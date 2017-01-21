@@ -39,7 +39,7 @@ $app['keywords_service'] = function ($app) {
 };
 
 $app['locations_service'] = function ($app) {
-    return new LocationTransformer();
+    return new LocationTransformer($app['minube_service']);
 };
 
 $searchCallback = function ($keywords) use ($app) {
@@ -74,11 +74,29 @@ $app->post('/locations', function (Request $request) use ($searchCallback, $app)
 
 $app->get('/locations/{keywords}', $searchCallback);
 
+$app->get('/hotelbeds/gethotels/{lat}/{lng}', function ($lat, $lng) use ($app) {
+    /** @var HotelBedsService */
+    $hotelbedsService = $app['hotelbeds_service'];
+
+    $output = $hotelbedsService->getHotelsByCoords($lat, $lng);
+
+    return $app->json($output);
+});
+
+$app->get('/hotelbeds/status', function () use ($app) {
+    /** @var HotelBedsService */
+    $hotelbedsService = $app['hotelbeds_service'];
+
+    $result = $hotelbedsService->getStatus();
+    $output = ['status' => $result->status];
+    return $app->json($output);
+});
+
 $app->get('/minube/getpois/{categoryId}', function ($categoryId) use ($app) {
     /** @var MinubeService */
     $minubeService = $app['minube_service'];
 
-    $output = $minubeService->getCitiesByCategoryId($categoryId);
+    $output = $minubeService->getPoisByCategoryId($categoryId);
     return $app->json($output);
 })->assert('categoryId', '\d+');
 
@@ -93,15 +111,6 @@ $app->get('/minube/getcategory/{name}', function ($name) use ($app) {
 $app->get('/', function () use ($app) {
     $output = ['Bienvenido a Envify'];
 
-    return $app->json($output);
-});
-
-$app->get('/hbstatus', function () use ($app) {
-    /** @var HotelBedsService */
-    $hotelbedsService = $app['hotelbeds_service'];
-
-    $result = $hotelbedsService->getStatus();
-    $output = ['status' => $result->status];
     return $app->json($output);
 });
 
