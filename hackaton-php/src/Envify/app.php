@@ -37,28 +37,37 @@ $app['locations_service'] = function ($app) {
     return new LocationTransformer();
 };
 
-$app->post('/locations', function (Request $request) use ($app) {
-    /** @var HotelBedsService */
-    $hotelbedsService = $app['hotelbeds_service'];
+$searchCallback = function ($keywords) use ($app) {
+    if (!is_array($keywords)) {
+        $keywords = explode(',', $keywords);
+    }
 
-    $keywords = $request->get('keywords');
-
-    $output = $keywords;
-    return $app->json($output);
-});
-
-$app->get('/locations/{keywords}', function ($keywords) use ($app) {
     /** @var TransformerInterface $keywordTransformer */
     $keywordTransformer = $app['keywords_service'];
 
+    /** @var TransformerInterface $locationsTransformer */
+    $locationsTransformer = $app['locations_service'];
+
     /** @var HotelBedsService */
     $hotelbedsService = $app['hotelbeds_service'];
 
-    $keywords = explode(',', $keywords);
+    $searchCriteria = $keywordTransformer->transform($keywords);
+    $locations = $locationsTransformer->transform($searchCriteria);
 
-    $output = $keywordTransformer->transform($keywords);
+    arsort($locations);
+
+    $output = $locations;
+    // $output = $searchCriteria;
     return $app->json($output);
+};
+
+$app->post('/locations', function (Request $request) use ($searchCallback, $app) {
+    $keywords = $request->get('keywords');
+
+    return $searchCallback($keywords);
 });
+
+$app->get('/locations/{keywords}', $searchCallback);
 
 $app->get('/', function () use ($app) {
     $output = ['Bienvenido a Envify'];

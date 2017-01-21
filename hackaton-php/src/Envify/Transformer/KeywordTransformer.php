@@ -33,12 +33,18 @@ class KeywordTransformer implements TransformerInterface
 
         foreach ($keywords as $keyword) {
             if (array_key_exists($keyword, $this->matching)) {
-                $searchCriteria[] = $this->matching[$keyword];
+                $searchWord = $this->matching[$keyword];
             } else {
-                $searchCriteria[] = $keyword;
+                $searchWord = $keyword;
+            }
+
+            if (array_key_exists($searchWord, $searchCriteria)) {
+                $searchCriteria[$searchWord]++;
+            } else {
+                $searchCriteria[$searchWord] = 1;
             }
         }
 
-        return array_unique($searchCriteria);
+        return $searchCriteria;
     }
 }
