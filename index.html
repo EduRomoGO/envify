@@ -3,8 +3,31 @@
 <head>
 	<meta charset="UTF-8">
 	<title>envify</title>
+	<link rel="stylesheet" type="text/css" href="./styles.css">
 </head>
 <body>
+		
+	<div id="dropzone">
+		<form action="http://c292aebc.ngrok.io/" class="dropzone needsclick dz-clickable" id="demo-upload">
+
+			<div class="dz-message needsclick">
+		    	Drop files here or click to upload.<br>
+		    	<span class="note needsclick">demo</span>
+			</div>
+
+		</form>
+	</div>
+
+	<div id='my-dropzone'>
+		my drop zone
+	</div>
+
+	<script
+		src="https://code.jquery.com/jquery-3.1.1.js"
+		integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
+		crossorigin="anonymous">
+	</script>
+	<script type="text/javascript" src='./dropzone.js'></script>
 	<script type="text/javascript" src='./app.js'></script>
 </body>
 </html>
