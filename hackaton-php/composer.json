@@ -1,0 +1,16 @@
+{
+  "name": "envify",
+  "type": "project",
+  "autoload": {
+    "psr-0": { "": "src/" }
+  },
+  "require": {
+    "silex/silex": "~2.0",
+    "guzzlehttp/guzzle": "~6.0"
+  },
+  "scripts": {
+    "server": [
+      "php -S localhost:8000 -t web web/index.php"
+    ]
+  }
+}
