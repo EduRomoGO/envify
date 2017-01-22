@@ -1,7 +1,7 @@
 hackaton-php/.idea/*
 hackaton-php/vendor/*
 
-/resources
+#/resources
 #.DS_Store
 img_processor_api/public/*
 
