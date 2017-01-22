@@ -4,6 +4,7 @@ namespace Envify\Transformer;
 
 use Envify\Service\HotelBedsService;
 use Envify\Service\MinubeService;
+use Envify\Service\RatioService;
 
 class LocationTransformer implements TransformerInterface
 {
@@ -13,10 +14,17 @@ class LocationTransformer implements TransformerInterface
     /** @var HotelBedsService  */
     private $hotelBedsService;
 
-    public function __construct(MinubeService $minubeService, HotelBedsService $hotelBedsService)
-    {
+    /** @var RatioService  */
+    private $ratioService;
+
+    public function __construct(
+        MinubeService $minubeService,
+        HotelBedsService $hotelBedsService,
+        RatioService $ratioService
+    ) {
         $this->minubeService = $minubeService;
         $this->hotelBedsService = $hotelBedsService;
+        $this->ratioService = $ratioService;
     }
 
     /**
@@ -30,18 +38,30 @@ class LocationTransformer implements TransformerInterface
     public function transform(array $keywords)
     {
         $resultPois = [];
+
+        $locationWeights = $this->ratioService->getLocationWeight();
+        $locationCodes = $this->minubeService->getZones();
+
         foreach ($keywords as $keyword => $weight) {
             $category = $this->minubeService->getCategoryIdByName($keyword);
-            // echo 'Searching ' . $keyword . '...';
 
             if (!property_exists($category, 'id')) {
-                //echo ' NOT FOUND';
                 continue;
             }
 
             $pois = $this->minubeService->getPoisByCategoryId($category->id);
 
             foreach ($pois as $poi) {
+                // The weight here changes to be the value from the ecologic ratios
+                if (array_key_exists($poi->zone_id, $locationCodes)) {
+                    $province = $locationCodes[$poi->zone_id];
+                    $lowerName = strtolower(str_replace(' ', '_', $province));
+
+                    if (array_key_exists($lowerName, $locationWeights)) {
+                        $weight = $locationWeights[$lowerName];
+                    }
+                }
+
                 if (array_key_exists($poi->id, $resultPois)) {
                     $poi->weight += $weight;
                 } else {

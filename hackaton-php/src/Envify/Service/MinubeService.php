@@ -22,7 +22,7 @@ class MinubeService
     public function getPoisByCategoryId($categoryId)
     {
         $categoryId = (int)$categoryId;
-        $limit = 5;
+        $limit = 12;
 
         try {
             $res = $this->client->request(
@@ -58,6 +58,32 @@ class MinubeService
                 $result = $category;
                 break;
             }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get All the zones from API
+     */
+    public function getZones()
+    {
+        // http://papi.minube.com/cities?lang=es&country_id=63&api_key=TzZMM8SretR3ZevC
+        try {
+            $res = $this->client->request(
+                'GET',
+                $this->parameters['endpoint'] . '/cities?lang=' . $this->lang . '&country_id=' . $this->country_id . '&api_key=' . $this->parameters['apiKey']
+            );
+        } catch (\Exception $e) {
+            throw new \Exception('Impossible to connect with MiNube');
+        }
+
+        $zones = json_decode($res->getBody()->getContents());
+        $result = [];
+
+        foreach ($zones as $zone) {
+            // $result[$zone->zone_name] = $zone->zone_id;
+            $result[$zone->zone_id] = $zone->zone_name;
         }
 
         return $result;

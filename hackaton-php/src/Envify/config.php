@@ -11,4 +11,7 @@ return [
         'endpoint' => 'http://papi.minube.com',
         'apiKey' => 'TzZMM8SretR3ZevC',
     ],
+    'ratio' => [
+        'endpoint' => 'http://localhost:3000'
+    ]
 ];
