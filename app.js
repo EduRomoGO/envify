@@ -122,3 +122,38 @@ $(function() {
   	// $('#map').show();
   });
 });
+
+function preFetchedHotelsCallback(res){
+	// Get the data of the hotels (just with name, location, NO IMAGE, NO DESCRIPTION)
+    // Show map with hotels?
+    // initMap({locations: res});
+}
+
+function getHotelInfo(id) {
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8000/hotel/' + id,
+        context: document.body,
+        timeout: 30000
+    }).done(function(res) {
+		console.log('Fetched detailed hotel', res);
+    });
+}
+
+function getHotelsByCoords(lat, lng) {
+	console.log('Fetching hotels in... lat: '  + lat + ' / lng: ' + lng);
+
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8000/hotels/' + lat + '/' + lng,
+        context: document.body,
+        timeout: 30000
+    }).done(function(res) {
+		preFetchedHotelsCallback(res);
+
+		for (var hotel in res) {
+            console.log('hotel', res[hotel]);
+            getHotelInfo(res[hotel].code);
+		}
+	});
+}
