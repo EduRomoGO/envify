@@ -1,0 +1,2 @@
+class Ratio < ApplicationRecord
+end
