@@ -9,21 +9,54 @@
 
 html {
 	/*background-color: #f4fdff;*/
+	font-family: 'Ruda', sans-serif;
 }
 
 #map {
 	height: 450px;
 }
 
-
+body {
+	margin: 0px;
+}
 
 .img_loader {
 	vertical-align: middle;
     margin-top: 180px;
-    margin-left: 50px;
-    height: 270px;
+    margin-left: 100px;
+    height: 280px;
     width: 250px;
-    border: none;
+    border: none !important;
     border-radius: 4px;
 	box-shadow: 0 0 12px 0 rgba(0,0,0,0.1), 0 10px 30px 0 rgba(0,0,0,0.2);
 }
+
+header {
+	height: 100px;
+	background-color: #343535;
+}
+
+.header-logo {
+	max-height: 100px;
+}
+
+.upload-box {
+    border: 1px solid #d2cfcf;
+    margin: 0px !important;
+    padding: 30px 10px 118px 10px;
+    border-radius: 3px;
+    font-size: 0.8em;
+}
+
+.hotel {
+	background-color: red;
+}
+
+
+
+
+
+
+
+
+

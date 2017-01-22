@@ -13,8 +13,9 @@ function initMap({locations}) {
       zoom: 6
     });
 
-    var marker, infoWindow;
+    
     locations.forEach(function (location) {
+    	var marker, infoWindow;
 
 		var contentString = '<div id="content">'+ location.name + '</div>';
 
@@ -34,6 +35,10 @@ function initMap({locations}) {
 
 		marker.addListener('click', function() {
 			infowindow.open(map, marker);
+			// $('.hotels').append('<article class="hotel">'+
+			// 		'hola'+
+			// 	'</article>');
+			getHotelsByCoords(parseFloat(location.location.lat), parseFloat(location.location.lng));
 		});
     });
 
@@ -137,6 +142,9 @@ function getHotelInfo(id) {
         timeout: 30000
     }).done(function(res) {
 		console.log('Fetched detailed hotel', res);
+		$('.hotels').append('<article class="hotel">'+
+					res.name +
+				'</article>');
     });
 }
 
