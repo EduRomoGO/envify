@@ -86,7 +86,7 @@ class HotelBedsService
   "geolocation": {
     "longitude": ' . $lng . ',
     "latitude": ' . $lat . ',
-    "radius": 1,
+    "radius": 100,
     "unit": "km"
   }
 }';

@@ -4,6 +4,7 @@ namespace Envify;
 
 use Envify\Service\HotelBedsService;
 use Envify\Service\MinubeService;
+use Envify\Service\RatioService;
 use Envify\Transformer\KeywordTransformer;
 use Envify\Transformer\LocationTransformer;
 use Envify\Transformer\TransformerInterface;
@@ -34,12 +35,16 @@ $app['minube_service'] = function ($app) {
     return new MinubeService($app['credentials']['minube'], $app['http_client']);
 };
 
+$app['ratio_service'] = function ($app) {
+    return new RatioService($app['credentials']['ratio'], $app['http_client']);
+};
+
 $app['keywords_service'] = function ($app) {
     return new KeywordTransformer();
 };
 
 $app['locations_service'] = function ($app) {
-    return new LocationTransformer($app['minube_service'], $app['hotelbeds_service']);
+    return new LocationTransformer($app['minube_service'], $app['hotelbeds_service'], $app['ratio_service']);
 };
 
 $searchCallback = function ($keywords) use ($app) {
