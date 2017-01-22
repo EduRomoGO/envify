@@ -22,7 +22,7 @@ class HotelBedsService
         try {
             $res = $this->client->request(
                 'GET',
-                $this->parameters['endpoint'] . '/hotel-content-api/1.0/hotels/' . $hotelCode,
+                $this->parameters['endpoint'] . '/hotel-content-api/1.0/hotels/' . $hotelCode . '?language=CAS',
                 [
                     'headers' => [
                         'Api-Key' => $this->parameters['apiKey'],
@@ -40,9 +40,14 @@ class HotelBedsService
 
         $hotelInfo = [
             'id' => $result->hotel->code,
-            'name' => $result->hotel->name
+            'name' => $result->hotel->name->content,
+            'location' => [
+                'lat' => $result->hotel->coordinates->latitude,
+                'lng' => $result->hotel->coordinates->longitude,
+            ],
+            'image' => $result->hotel->images[0]->path,
+            'description'=> $result->hotel->description->content
         ];
-
 
         return $hotelInfo;
     }
