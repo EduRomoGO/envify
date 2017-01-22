@@ -1,6 +1,6 @@
 /*! HTML5 Boilerplate v5.0 | MIT License | http://h5bp.com/ */
 
-html {
+/*html {
     color: #222;
     font-size: 1em;
     line-height: 1.4;
@@ -14,18 +14,18 @@ html {
 ::selection {
     background: #b3d4fc;
     text-shadow: none;
-}
+}*/
 
-hr {
+/*hr {
     display: block;
     height: 1px;
     border: 0;
     border-top: 1px solid #ccc;
     margin: 1em 0;
     padding: 0;
-}
+}*/
 
-audio,
+/*audio,
 canvas,
 iframe,
 img,
@@ -42,31 +42,31 @@ fieldset {
 
 textarea {
     resize: vertical;
-}
-
+}*/
+/*
 .browserupgrade {
     margin: 0.2em 0;
     background: #ccc;
     color: #000;
     padding: 0.2em 0;
 }
-
+*/
 
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
-* {
+/** {
     border: 1px solid red;
 }
-
+*/
 body {
     background: url(../img/sunset-beach-chairs-stock-footage.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     -webkit-animation-name: body; /* Chrome, Safari, Opera */
-    -webkit-animation-duration: 30s; /* Chrome, Safari, Opera */
+    -webkit-animation-duration: 300s; /* Chrome, Safari, Opera */
     animation-name: body;
-    transition: 30s;
+    transition: 300s;
     animation-iteration-count: infinite;
     position: relative;
 }
