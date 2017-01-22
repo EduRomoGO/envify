@@ -46,7 +46,7 @@ class HotelBedsService
                 'lng' => $result->hotel->coordinates->longitude,
             ],
             'image' => 'http://photos.hotelbeds.com/giata/' . $result->hotel->images[0]->path,
-            'description'=> $result->hotel->description->content
+            'description'=> substr($result->hotel->description->content, 0, 150) . '...'
         ];
 
         return $hotelInfo;
@@ -117,7 +117,9 @@ class HotelBedsService
             foreach ($result->hotels->hotels as $hotel) {
                 $hotels[] = [
                     'code' => $hotel->code,
-                    'name' => $hotel->name,
+                    'name' => preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/', function ($match) {
+                        return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
+                    }, $hotel->name),
                     'stars' => $hotel->categoryCode,
                     'location' => [
                         'lat' => $hotel->latitude,
