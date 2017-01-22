@@ -13,8 +13,9 @@ function initMap({locations}) {
       zoom: 6
     });
 
-    var marker, infoWindow;
+    
     locations.forEach(function (location) {
+    	var marker, infoWindow;
 
 		var contentString = '<div id="content">'+ location.name + '</div>';
 
