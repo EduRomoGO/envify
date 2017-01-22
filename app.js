@@ -109,7 +109,6 @@ function getDestinations ({keywords}) {
 	});
 }
 
-
 $(function() {
   $('#map').hide();
 
@@ -132,6 +131,45 @@ function preFetchedHotelsCallback(res){
 	// Get the data of the hotels (just with name, location, NO IMAGE, NO DESCRIPTION)
     // Show map with hotels?
     // initMap({locations: res});
+    for (var hotel in res) {
+        updateHotelCard(hotel);
+    }
+}
+
+function clearHotels() {
+    $('.hotels').html('');
+}
+
+function updateHotelCard(res) {
+	if (!res.hasOwnProperty('name')) {
+		return '';
+	}
+
+    var description;
+    if (res.hasOwnProperty('description')) {
+        description = res.description;
+    } else {
+        description = '';
+    }
+
+    var image;
+    if (res.hasOwnProperty('image')) {
+        image = res.image;
+    } else {
+        image = '';
+    }
+
+	if ($('#hotelid' + res.id).length) {
+		$('#hotelpreview' + res.id).attr('src', image);
+		$('#hoteldescription' + res.id).html(description);
+	} else {
+
+        $('.hotels').append('<article class="hotel" id="hotelid' + res.id + '">'+
+            '<div class="hotel-name">' + res.name + '</div>'+
+            '<img class="hotel-preview" id="hotelpreview' + res.id + '" src="' + image + '">'+
+            '<div class="hotel-description" id="hoteldescription' + res.id + '">' + description + '</div>'+
+            '</article>');
+	}
 }
 
 function getHotelInfo(id) {
@@ -142,16 +180,14 @@ function getHotelInfo(id) {
         timeout: 30000
     }).done(function(res) {
 		console.log('Fetched detailed hotel', res);
-		// res = {
-		// 	name: 'sateho',
-		// 	image: '',
-		// 	description: 'nstaoehusantohusnathoeusnatho satehousnth santeho usathoeu stanhou'
-		// };
-		$('.hotels').append('<article class="hotel">'+
-								'<div class="hotel-name">' + res.name + '</div>'+
-								'<img class="hotel-preview" src="'+ res.image +'">'+
-								'<div class="hotel-description">' + res.description + '</div>'+
-				'</article>');
+
+        updateHotelCard(res);
+
+		// $('.hotels').append('<article class="hotel" id="hotelid' + res.id + '">'+
+		// 						'<div class="hotel-name">' + res.name + '</div>'+
+		// 						'<img class="hotel-preview" src="'+ res.image +'">'+
+		// 						'<div class="hotel-description">' + res.description + '</div>'+
+		// 		'</article>');
     });
 }
 
@@ -164,6 +200,7 @@ function getHotelsByCoords(lat, lng) {
         context: document.body,
         timeout: 30000
     }).done(function(res) {
+    	clearHotels();
 		preFetchedHotelsCallback(res);
 
 		for (var hotel in res) {
