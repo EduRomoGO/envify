@@ -49,13 +49,34 @@ header {
 }
 
 .hotel {
-	background-color: red;
+	background-color: white;
+    width: 400px;
+    padding: 20px;
+    border-radius: 3px;
+    margin: 5px;
 }
 
+.hotel-name {
+	font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
 
+.hotels {
+	background-color: #fff5f5;
+}
 
+.behind {
+	background-color: #343535;
+}
 
+.hotel-preview {
+	max-height: 250px;
+}
 
+.hotel-description {
+	font-size: 0.9em;
+}
 
 
 
