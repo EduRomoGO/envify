@@ -5,9 +5,12 @@ function initMap({locations}) {
 
     // Create a map object and specify the DOM element for display.
     var map = new google.maps.Map(document.getElementById('map'), {
-      center: locations[0].location,
+      center: {
+	      	lat: parseFloat(locations[0].location.lat),
+	      	lng: parseFloat(locations[0].location.lng)
+      },
       scrollwheel: false,
-      zoom: 3
+      zoom: 6
     });
 
     var marker, infoWindow;
@@ -21,7 +24,10 @@ function initMap({locations}) {
 
     	marker = new google.maps.Marker({
 	      map: map,
-	      position: location.location
+	      position: {
+	      	lat: parseFloat(location.location.lat),
+	      	lng: parseFloat(location.location.lng)
+	      }
 	      // label: 'hola',
 	      // title: 'Hello World!'
 	    });
@@ -63,24 +69,24 @@ function getDestinations ({keywords}) {
 	function success (res) {
 		console.log('dest');
 		console.log(res);
-		res = [
-			{
-				name: 'malibu',
-	            location: {
-	                lat: -25.363,
-	                lng: 131.044
-	            },
-	            hotels: []
-			},
-			{
-				name: 'marbella',
-	            location: {
-	                lat: -27.363,
-	                lng: 133.044
-	            },
-	            hotels: []
-			}
-		];
+		// res = [
+		// 	{
+		// 		name: 'malibu',
+	 //            location: {
+	 //                lat: -25.363,
+	 //                lng: 131.044
+	 //            },
+	 //            hotels: []
+		// 	},
+		// 	{
+		// 		name: 'marbella',
+	 //            location: {
+	 //                lat: -27.363,
+	 //                lng: 133.044
+	 //            },
+	 //            hotels: []
+		// 	}
+		// ];
 		initMap({locations: res});
 		$('#map').show();
 		$('#my-dropzone').hide();
