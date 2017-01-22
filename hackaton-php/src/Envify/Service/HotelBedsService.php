@@ -45,7 +45,7 @@ class HotelBedsService
                 'lat' => $result->hotel->coordinates->latitude,
                 'lng' => $result->hotel->coordinates->longitude,
             ],
-            'image' => $result->hotel->images[0]->path,
+            'image' => 'http://photos.hotelbeds.com/giata/' . $result->hotel->images[0]->path,
             'description'=> $result->hotel->description->content
         ];
 
