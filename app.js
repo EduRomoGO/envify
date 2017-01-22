@@ -201,6 +201,7 @@ function getHotelsByCoords(lat, lng) {
         timeout: 30000
     }).done(function(res) {
     	clearHotels();
+    	$('html, body').animate({scrollTop: '+=450px'}, 800);
 		preFetchedHotelsCallback(res);
 
 		for (var hotel in res) {
