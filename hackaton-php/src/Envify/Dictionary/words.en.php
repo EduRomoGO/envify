@@ -6,4 +6,6 @@ return [
     'sea' => 'Beaches',
     'mountain' => 'Canyons',
     'snow' => 'Canyons',
+    'lake' => 'Lagos',
+    'nature' => 'Reservas Naturales'
 ];
