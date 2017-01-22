@@ -142,11 +142,11 @@ function getHotelInfo(id) {
         timeout: 30000
     }).done(function(res) {
 		console.log('Fetched detailed hotel', res);
-		res = {
-			name: 'sateho',
-			image: '',
-			description: 'nstaoehusantohusnathoeusnatho satehousnth santeho usathoeu stanhou'
-		};
+		// res = {
+		// 	name: 'sateho',
+		// 	image: '',
+		// 	description: 'nstaoehusantohusnathoeusnatho satehousnth santeho usathoeu stanhou'
+		// };
 		$('.hotels').append('<article class="hotel">'+
 								'<div class="hotel-name">' + res.name + '</div>'+
 								'<img class="hotel-preview" src="'+ res.image +'">'+
