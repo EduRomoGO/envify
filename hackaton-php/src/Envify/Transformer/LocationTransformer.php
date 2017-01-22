@@ -52,11 +52,13 @@ class LocationTransformer implements TransformerInterface
                 $location->lat = $poi->latitude;
                 $location->lng = $poi->longitude;
 
-                $resultPois[$poi->id] = [
+                $resultPois[] = [
+                    'id' => $poi->id,
                     'name' => $poi->name,
                     'location' => $location,
                     'weight' => $poi->weight,
-                    'hotels' => $this->hotelBedsService->getHotelsByCoords($location->lat, $location->lng, 5)
+                    // 'hotels' => $this->hotelBedsService->getHotelsByCoords($location->lat, $location->lng, 5)
+                    'hotels' => []
                 ];
             }
         }

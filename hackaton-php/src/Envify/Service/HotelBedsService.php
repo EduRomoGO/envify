@@ -16,6 +16,47 @@ class HotelBedsService
         $this->client = $client;
     }
 
+    public function getHotelInfoByCode($hotelCode)
+    {
+        // https://api.test.hotelbeds.com/hotel-content-api/1.0/hotels/1?language=ENG
+        try {
+            $res = $this->client->request(
+                'GET',
+                $this->parameters['endpoint'] . '/hotel-content-api/1.0/hotels/' . $hotelCode,
+                [
+                    'headers' => [
+                        'Api-Key' => $this->parameters['apiKey'],
+                        'X-Signature' => $this->getSignature(),
+                        'Accept' => 'application/json',
+                    ]
+                ]
+            );
+        } catch (\Exception $e) {
+            // var_dump($e);
+            throw new \Exception('Impossible to connect with HotelBeds');
+        }
+
+        $result = json_decode($res->getBody()->getContents());
+
+        $hotelInfo = [
+            'id' => $result->hotel->code,
+            'name' => $result->hotel->name
+        ];
+
+
+        return $hotelInfo;
+    }
+
+    /**
+     * Get a list of hotels with all the details
+     *
+     * @param $lat
+     * @param $lng
+     * @param int $limit
+     *
+     * @return array
+     * @throws \Exception
+     */
     public function getHotelsByCoords($lat, $lng, $limit = 5)
     {
         // TODO: Give new dates based on current date
@@ -60,7 +101,7 @@ class HotelBedsService
                 ]
             );
         } catch (\Exception $e) {
-            var_dump($e);
+            // var_dump($e);
             throw new \Exception('Impossible to connect with HotelBeds');
         }
 
@@ -70,7 +111,13 @@ class HotelBedsService
         if (property_exists($result, 'hotels') && property_exists($result->hotels, 'hotels')) {
             foreach ($result->hotels->hotels as $hotel) {
                 $hotels[] = [
-                    'name' => $hotel->name
+                    'code' => $hotel->code,
+                    'name' => $hotel->name,
+                    'stars' => $hotel->categoryCode,
+                    'location' => [
+                        'lat' => $hotel->latitude,
+                        'lng' => $hotel->longitude
+                    ]
                 ];
 
                 if (++$i === $limit) {

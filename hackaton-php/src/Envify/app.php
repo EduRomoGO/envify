@@ -53,9 +53,6 @@ $searchCallback = function ($keywords) use ($app) {
     /** @var TransformerInterface $locationsTransformer */
     $locationsTransformer = $app['locations_service'];
 
-    /** @var HotelBedsService */
-    $hotelbedsService = $app['hotelbeds_service'];
-
     $searchCriteria = $keywordTransformer->transform($keywords);
     $locations = $locationsTransformer->transform($searchCriteria);
 
@@ -75,11 +72,22 @@ $app->post('/locations', function (Request $request) use ($searchCallback, $app)
 
 $app->get('/locations/{keywords}', $searchCallback);
 
-$app->get('/hotelbeds/gethotels/{lat}/{lng}', function ($lat, $lng) use ($app) {
+$app->get('/hotels/{lat}/{lng}', function ($lat, $lng) use ($app) {
     /** @var HotelBedsService */
     $hotelbedsService = $app['hotelbeds_service'];
 
-    $output = $hotelbedsService->getHotelsByCoords($lat, $lng);
+    $limit = 5;
+    $output = $hotelbedsService->getHotelsByCoords($lat, $lng, $limit);
+
+    return $app->json($output);
+});
+
+$app->get('/hotel/{id}', function ($id) use ($app) {
+    /** @var HotelBedsService */
+    $hotelbedsService = $app['hotelbeds_service'];
+
+    $limit = 5;
+    $output = $hotelbedsService->getHotelInfoByCode($id);
 
     return $app->json($output);
 });
