@@ -50,10 +50,12 @@ header {
 
 .hotel {
 	background-color: white;
-    width: 400px;
+    width: 378px;
     padding: 20px;
     border-radius: 3px;
     margin: 5px;
+    display: inline-block;
+    vertical-align: top;
 }
 
 .hotel-name {
@@ -63,6 +65,8 @@ header {
 }
 
 .hotels {
+    width: 90%;
+    margin: 0 auto;
 	background-color: #fff5f5;
 }
 
